@@ -1,16 +1,83 @@
-# React + Vite
+# Like / Dislike 按鈕互動規格文件
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 👍 Like 按鈕（喜歡）
 
-Currently, two official plugins are available:
+### 1. 基本渲染需求
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 按鈕需具備 class 名稱：`like-button`。
+- 初始 Like 數量：**100**
+- 按鈕文字格式：`Like | 100`
+- 數字需包在 `<span class="likes-counter">100</span>`
 
-## React Compiler
+### 2. 互動行為
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+#### 點擊（未點過）
 
-## Expanding the ESLint configuration
+- Like 數量 **+1**
+- 按鈕加入 `liked` class
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+#### 再次點擊（已點過）
+
+- Like 數量 **-1**
+- 移除 `liked` class
+
+#### Dislike 已點擊 → 點 Like
+
+- Like 數量 **+1**
+- Like 加上 `liked`
+- Dislike 數量 **-1**
+- Dislike 移除 `disliked`
+
+---
+
+## 👎 Dislike 按鈕（不喜歡）
+
+### 1. 基本渲染需求
+
+- 按鈕需具備 class 名稱：`dislike-button`
+- 初始 Dislike 數量：**25**
+- 顯示文字格式：`Dislike | 25`
+- 數字需包在 `<span class="dislikes-counter">25</span>`
+
+### 2. 互動行為
+
+#### 點擊（未點過）
+
+- Dislike 數量 **+1**
+- 按鈕加入 `disliked` class
+
+#### 再次點擊（已點過）
+
+- Dislike 數量 **-1**
+- 移除 `disliked` class
+
+#### Like 已點擊 → 點 Dislike
+
+- Dislike 數量 **+1**
+- Dislike 加上 `disliked`
+- Like 數量 **-1**
+- Like 移除 `liked`
+
+---
+
+## 📌 Like / Dislike 互斥行為
+
+- Like 與 Dislike **不能同時為啟用狀態**
+- 點擊其中一個會取消另一個
+
+## 📘 行為規則總表
+
+| 行為               | Like 數 | Dislike 數 | Like class | Dislike class |
+| ------------------ | ------- | ---------- | ---------- | ------------- |
+| 點 Like（未點）    | +1      | 不變       | 加 liked   | 不變          |
+| 點 Like（已點）    | -1      | 不變       | 移除 liked | 不變          |
+| 點 Dislike（未點） | 不變    | +1         | 不變       | 加 disliked   |
+| 點 Dislike（已點） | 不變    | -1         | 不變       | 移除 disliked |
+| Dislike→Like       | +1      | -1         | 加 liked   | 移除 disliked |
+| Like→Dislike       | -1      | +1         | 移除 liked | 加 disliked   |
+
+## Available packages and libraries
+
+React (v18.2.0)
+Classnames (v2.3.1)
+Typescript (v4.2.4)
